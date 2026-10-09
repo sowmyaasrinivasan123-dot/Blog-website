@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Margin Notes Blog</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;0,800;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf8f4;--card:#fff;--ink:#1c1b1a;--muted:#6d6a65;--line:#e4dfd6;--accent:#0d6b5c}
+[data-theme=dark]{--bg:#121413;--card:#1b1e1d;--ink:#ecebe7;--muted:#9a9993;--line:#2c302e;--accent:#4fd1b5}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+nav{max-width:1080px;margin:auto;padding:14px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.logo{font:800 1.5rem 'Newsreader',serif;margin-right:auto}
+nav a.link{color:var(--muted)}nav a.link:hover{color:var(--ink)}
+nav button,.chip{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:6px 14px;cursor:pointer}
+main{max-width:1080px;margin:auto;padding:28px 20px 60px}
+.hero h1{font:800 clamp(2rem,5vw,3.2rem)/1.1 'Newsreader',serif;max-width:700px}
+.hero p{color:var(--muted);margin:10px 0 24px;max-width:560px}
+.tools{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.tools input{flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--card);color:var(--ink)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip.on{background:var(--ink);color:var(--bg)}
+h2.sec{font:600 1.4rem 'Newsreader',serif;margin:8px 0 14px}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-bottom:34px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.card svg{width:100%;height:auto;display:block}
+.card .body{padding:16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font:600 1.25rem/1.25 'Newsreader',serif}
+.card:hover h3{color:var(--accent)}
+.meta{color:var(--muted);font-size:.85rem}
+.tag{font-size:.8rem;color:var(--accent)}
+.more{display:block;margin:30px auto 0;padding:11px 26px;font:600 1rem 'Inter';border:1px solid var(--ink);background:none;color:var(--ink);border-radius:8px;cursor:pointer}
+.empty{color:var(--muted);padding:30px 0}
+article{max-width:680px;margin:auto}
+article h1{font:800 clamp(2rem,5vw,2.8rem)/1.15 'Newsreader',serif;margin:10px 0}
+article svg{width:100%;height:auto;border-radius:10px;margin:18px 0}
+article p{font:400 1.15rem/1.8 'Newsreader',serif;margin-bottom:1.2em}
+.share{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0;align-items:center}
+.share a{border:1px solid var(--line);padding:5px 12px;border-radius:20px;font-size:.9rem}
+.comments{border-top:1px solid var(--line);padding-top:20px;margin-top:30px}
+.comments textarea,.comments input{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;margin-bottom:8px}
+.comment{padding:10px 0;border-bottom:1px dashed var(--line)}
+.rel{margin-top:40px}
+footer{border-top:1px solid var(--line);padding:26px 20px;text-align:center;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+  <nav aria-label="Main">
+    <a class="logo" href="#/">Margin Notes</a>
+    <a class="link" href="#/">Home</a>
+    <a class="link" href="#/?cat=Design">Design</a>
+    <a class="link" href="#/?cat=Code">Code</a>
+    <a class="link" href="#/?cat=Life">Life</a>
+    <button id="theme" aria-label="Toggle dark mode">Dark mode</button>
+  </nav>
+</header>
+<main id="app"></main>
+<footer>© 2026 Margin Notes · Built with HTML, CSS and JavaScript</footer>
+
+<script>
+const PALETTE={Design:['#f4a259','#bc4b51'],Code:['#2a9d8f','#264653'],Life:['#8cb369','#5b8e7d']};
+const T=[
+ ['Why small type needs more air','Design',['typography','layout'],'Tight leading is the quickest way to make a good typeface unreadable.'],
+ ['A gentle guide to CSS Grid','Code',['css','layout'],'Grid replaces a dozen hacks with two lines of declarative layout.'],
+ ['Walking without a destination','Life',['habits','mindfulness'],'A slow walk with no goal is one of the cheapest resets there is.'],
+ ['Colour palettes that age well','Design',['colour','branding'],'Choose a restrained palette and let one colour do the heavy lifting.'],
+ ['Understanding JavaScript closures','Code',['javascript','basics'],'A closure is a function that remembers where it was born.'],
+ ['The case for a paper notebook','Life',['productivity','habits'],'Writing by hand slows you down just enough to think.'],
+ ['Designing empty states','Design',['ux','copywriting'],'An empty screen is an invitation, not an apology.'],
+ ['Fetching data with async/await','Code',['javascript','api'],'Async code reads top to bottom once you stop fearing promises.'],
+ ['Learning to rest on purpose','Life',['wellbeing','habits'],'Rest works better when you plan it as carefully as work.'],
+ ['Responsive images done right','Code',['html','performance'],'Serve the right size to the right screen and your pages get lighter.'],
+ ['Grids, gutters and rhythm','Design',['layout','ux'],'Consistent spacing is the invisible backbone of a calm interface.'],
+ ['Cooking one new thing a week','Life',['hobbies','mindfulness'],'A small weekly experiment keeps curiosity alive in a busy routine.']
+].map((p,n)=>({id:n+1,title:p[0],cat:p[1],tags:p[2],excerpt:p[3],date:new Date(2026,9,7-n*4).toISOString().slice(0,10),
+  body:[p[3],'Start small. Pick one idea from this post and try it for a week before changing anything else. Most improvements come from repeating a modest habit, not from a dramatic overhaul.','When it works, keep it. When it does not, you have learned something useful for the next attempt. Share what you find in the comments below.']}));
+
+const PAGE=6;let shown=PAGE,cat='All',q='';
+const $app=document.getElementById('app');
+const art=(p,big)=>{const c=PALETTE[p.cat];return `<svg viewBox="0 0 600 ${big?300:260}" role="img" aria-label="${p.cat} illustration"><defs><linearGradient id="g${p.id}${big?'b':''}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></linearGradient></defs><rect width="600" height="300" fill="url(#g${p.id}${big?'b':''})"/><circle cx="${100+p.id*37%400}" cy="130" r="${60+p.id*7%40}" fill="#fff" opacity=".18"/><circle cx="${480-p.id*29%300}" cy="200" r="${40+p.id*5%30}" fill="#fff" opacity=".14"/></svg>`};
+const card=p=>`<a class="card" href="#/post/${p.id}">${art(p)}<div class="body"><span class="tag">${p.cat}</span><h3>${p.title}</h3><p class="meta">${p.excerpt}</p><p class="meta">${p.date} · ${p.tags.map(t=>'#'+t).join(' ')}</p></div></a>`;
+
+function route(){
+  const h=location.hash.slice(1)||'/';
+  const m=h.match(/^\/post\/(\d+)/);
+  if(m)return post(+m[1]);
+  const c=h.match(/cat=(\w+)/);cat=c?c[1]:'All';
+  home();window.scrollTo(0,0);
+}
+function home(){
+  const f=T.filter(p=>(cat==='All'||p.cat===cat)&&(!q||(p.title+p.excerpt+p.tags.join(' ')).toLowerCase().includes(q.toLowerCase())));
+  $app.innerHTML=`
+    <section class="hero"><h1>Notes on design, code and living slowly.</h1><p>Short, readable essays published every few days.</p></section>
+    <div class="tools"><input id="s" type="search" placeholder="Search articles or tags" value="${q}" aria-label="Search articles">
+      <div class="chips">${['All','Design','Code','Life'].map(k=>`<a class="chip ${k===cat?'on':''}" href="#/${k==='All'?'':'?cat='+k}">${k}</a>`).join('')}</div></div>
+    ${!q&&cat==='All'?`<h2 class="sec">Featured</h2><div class="feat">${T.slice(0,2).map(card).join('')}</div>`:''}
+    <h2 class="sec">${q?'Search results':'Latest articles'}</h2>
+    ${f.length?`<div class="grid">${f.slice(0,shown).map(card).join('')}</div>`:'<p class="empty">No articles match. Try another word or category.</p>'}
+    ${f.length>shown?'<button class="more" id="more">Load more</button>':''}`;
+  const s=document.getElementById('s');
+  s.oninput=e=>{q=e.target.value;shown=PAGE;const pos=e.target.selectionStart;home();const n=document.getElementById('s');n.focus();n.setSelectionRange(pos,pos)};
+  const mb=document.getElementById('more');if(mb)mb.onclick=()=>{shown+=PAGE;home()};
+}
+function post(id){
+  const p=T.find(x=>x.id===id);if(!p){location.hash='#/';return}
+  const rel=T.filter(x=>x.id!==id&&(x.cat===p.cat||x.tags.some(t=>p.tags.includes(t)))).slice(0,3);
+  const url=encodeURIComponent(location.href),ttl=encodeURIComponent(p.title);
+  const saved=JSON.parse(localStorage.getItem('c'+id)||'[]');
+  $app.innerHTML=`<article>
+    <a class="meta" href="#/">← All articles</a>
+    <h1>${p.title}</h1>
+    <p class="meta">${p.cat} · ${p.date} · ${p.tags.map(t=>'#'+t).join(' ')}</p>
+    ${art(p,true)}${p.body.map(t=>`<p>${t}</p>`).join('')}
+    <div class="share"><span class="meta">Share:</span>
+      <a href="https://twitter.com/intent/tweet?text=${ttl}&url=${url}" target="_blank" rel="noopener">X</a>
+      <a href="https://www.linkedin.com/sharing/share-offsite/?url=${url}" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://wa.me/?text=${ttl}%20${url}" target="_blank" rel="noopener">WhatsApp</a></div>
+    <section class="comments"><h2 class="sec">Comments</h2><div id="clist">${saved.map(c=>`<div class="comment"><b>${c.n}</b><p style="font:inherit">${c.t}</p></div>`).join('')||'<p class="meta">No comments yet.</p>'}</div>
+      <input id="cn" placeholder="Your name" aria-label="Your name"><textarea id="ct" rows="3" placeholder="Write a comment" aria-label="Comment"></textarea>
+      <button class="chip" id="cb">Post comment</button></section>
+    <section class="rel"><h2 class="sec">Related articles</h2><div class="grid">${rel.map(card).join('')}</div></section></article>`;
+  document.getElementById('cb').onclick=()=>{
+    const n=document.getElementById('cn').value.trim(),t=document.getElementById('ct').value.trim();
+    if(!n||!t)return;const esc=s=>s.replace(/</g,'&lt;');
+    saved.push({n:esc(n),t:esc(t)});localStorage.setItem('c'+id,JSON.stringify(saved));post(id)};
+  window.scrollTo(0,0);
+}
+const root=document.documentElement,tb=document.getElementById('theme');
+const setTheme=d=>{root.dataset.theme=d?'dark':'light';tb.textContent=d?'Light mode':'Dark mode';localStorage.setItem('dark',d?'1':'0')};
+setTheme(localStorage.getItem('dark')==='1'||(localStorage.getItem('dark')===null&&matchMedia('(prefers-color-scheme: dark)').matches));
+tb.onclick=()=>setTheme(root.dataset.theme!=='dark');
+window.addEventListener('hashchange',route);route();
+</script>
+</body>
+</html>
